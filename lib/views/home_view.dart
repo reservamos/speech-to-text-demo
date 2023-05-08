@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,13 @@ class HomeView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                '¿Dinos a dónde quieres viajar?',
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              ),
+            ),
             RecordButton(
               onRecord: () => controller.startRecord(),
               onStop: () => controller.stopRecord(),
@@ -37,17 +45,49 @@ class HomeView extends StatelessWidget {
               ),
             ),
             StreamBuilder<String>(
-                stream: controller.transcription,
-                initialData: '',
+              stream: controller.transcription,
+              initialData: '',
+              builder: (context, snapshot) => Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  snapshot.data!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ),
+            StreamBuilder<bool>(
+                stream: controller.isValidTranscription,
+                initialData: false,
                 builder: (context, snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      snapshot.data!,
-                      style: TextStyle(fontSize: 20, color: Colors.grey[600]),
+                  return Visibility(
+                    visible: snapshot.data!,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: MaterialButton(
+                        onPressed: () {},
+                        shape: const StadiumBorder(),
+                        height: 50,
+                        color: Colors.blue[600],
+                        child: TextButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.search,
+                            color: Colors.white,
+                          ),
+                          label: const Text(
+                            'Buscar',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
                     ),
                   );
-                })
+                }),
           ],
         ),
       ),

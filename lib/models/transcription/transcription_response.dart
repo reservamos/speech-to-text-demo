@@ -1,11 +1,12 @@
-class Transcription {
+class TranscriptionResponse {
   String text;
 
-  Transcription({
+  TranscriptionResponse({
     required this.text,
   });
 
-  factory Transcription.fromJson(Map<String, dynamic> json) => Transcription(
+  factory TranscriptionResponse.fromJson(Map<String, dynamic> json) =>
+      TranscriptionResponse(
         text: json["text"],
       );
 
