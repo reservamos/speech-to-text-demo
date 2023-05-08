@@ -13,58 +13,66 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                '¿Dinos a dónde quieres viajar?',
-                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-              ),
-            ),
-            RecordButton(
-              onRecord: () => controller.startRecord(),
-              onStop: () => controller.stopRecord(),
-            ),
-            StreamBuilder<bool>(
-              stream: controller.isLoading,
-              initialData: false,
-              builder: (context, snapshot) => Visibility(
-                visible: snapshot.data!,
-                replacement: const SizedBox(height: 2),
-                child: SizedBox(
-                  height: 2,
-                  width: 200,
-                  child: LinearProgressIndicator(
-                    color: Colors.blue[600],
+    return Stack(
+      children: [
+        Positioned.fill(
+            child: DecoratedBox(
+                decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                        radius: 0.6,
+                        colors: [Colors.blue[600]!, Colors.black])))),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    '¿Dinos a dónde quieres viajar?',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
-              ),
-            ),
-            StreamBuilder<String>(
-              stream: controller.transcription,
-              initialData: '',
-              builder: (context, snapshot) => Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  snapshot.data!,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
-                    fontStyle: FontStyle.italic,
+                RecordButton(
+                  onRecord: () => controller.startRecord(),
+                  onStop: () => controller.stopRecord(),
+                ),
+                StreamBuilder<bool>(
+                  stream: controller.isLoading,
+                  initialData: false,
+                  builder: (context, snapshot) => Visibility(
+                    visible: snapshot.data!,
+                    replacement: const SizedBox(height: 2),
+                    child: SizedBox(
+                      height: 2,
+                      width: 200,
+                      child: LinearProgressIndicator(
+                        color: Colors.blue[600],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            StreamBuilder<bool>(
-                stream: controller.isValidTranscription,
-                initialData: false,
-                builder: (context, snapshot) {
-                  return Visibility(
+                StreamBuilder<String>(
+                  stream: controller.transcription,
+                  initialData: '',
+                  builder: (context, snapshot) => Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      snapshot.data!,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
+                ),
+                StreamBuilder<bool>(
+                  stream: controller.isValidTranscription,
+                  initialData: false,
+                  builder: (context, snapshot) => Visibility(
                     visible: snapshot.data!,
                     child: Padding(
                       padding: const EdgeInsets.all(20),
@@ -86,11 +94,13 @@ class HomeView extends StatelessWidget {
                         ),
                       ),
                     ),
-                  );
-                }),
-          ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }
