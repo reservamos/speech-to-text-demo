@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:sttdemo/controllers/home_controller.dart';
 import 'package:sttdemo/widgets/record_button.dart';
@@ -43,12 +44,42 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: RecordButton(
-        isRecording: isRecording,
-        isLoading: isLoading,
-        onPressed: onPressed,
-      )),
+      body: Stack(
+        children: [
+          Center(
+            child: RecordButton(
+              isRecording: isRecording,
+              isLoading: isLoading,
+              onPressed: onPressed,
+            ),
+          ),
+          Positioned(
+            bottom: 60,
+            left: 20,
+            right: 20,
+            child: SizedBox(
+              width: 250.0,
+              child: DefaultTextStyle(
+                style: TextStyle(fontSize: 20.0, color: Colors.grey[600]),
+                child: StreamBuilder<String>(
+                    stream: widget.controller.transcription.stream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return AnimatedTextKit(
+                          repeatForever: false,
+                          totalRepeatCount: 1,
+                          animatedTexts: [
+                            TyperAnimatedText(snapshot.data!),
+                          ],
+                        );
+                      }
+                      return Container();
+                    }),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

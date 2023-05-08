@@ -39,6 +39,7 @@ dependencies:
   path_provider: ^2.0.14
   http: ^0.13.6
   avatar_glow: ^2.0.2
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:

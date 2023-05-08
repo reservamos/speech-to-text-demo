@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
+import 'package:sttdemo/models/transcription.dart';
 import 'package:sttdemo/utils/constants.dart';
 
 class HomeController {
@@ -14,6 +16,7 @@ class HomeController {
 
   late final Record record;
   StreamController<bool> isLoading = StreamController<bool>.broadcast();
+  StreamController<String> transcription = StreamController<String>.broadcast();
 
   Future<void> startRecord() async {
     Directory tmpDir = await getTemporaryDirectory();
@@ -73,7 +76,10 @@ class HomeController {
       StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
-        log(await response.stream.bytesToString());
+        final data = jsonDecode(await response.stream.bytesToString());
+        Transcription transcript = Transcription.fromJson(data);
+        transcription.sink.add(transcript.text);
+        log(transcript.text);
       } else {
         log(response.reasonPhrase.toString());
       }
