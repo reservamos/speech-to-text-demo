@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:sttdemo/models/transcription.dart';
 import 'package:sttdemo/utils/constants.dart';
 
@@ -15,12 +16,13 @@ class HomeController {
   }
 
   late final Record record;
-  StreamController<bool> isLoading = StreamController<bool>.broadcast();
-  StreamController<String> transcription = StreamController<String>.broadcast();
+  BehaviorSubject<bool> isLoading = BehaviorSubject<bool>();
+  BehaviorSubject<String> transcription = BehaviorSubject<String>();
 
   Future<void> startRecord() async {
     Directory tmpDir = await getTemporaryDirectory();
     String audioPath = '${tmpDir.path}/${Constants.audioFile}';
+    transcription.sink.add('');
 
     if (await record.hasPermission()) {
       // Start recording
@@ -72,21 +74,21 @@ class HomeController {
     request.headers.addAll(headers);
 
     try {
-      isLoading.add(true);
+      isLoading.sink.add(true);
       StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
         final data = jsonDecode(await response.stream.bytesToString());
+        log(data.toString(), name: 'openai');
         Transcription transcript = Transcription.fromJson(data);
         transcription.sink.add(transcript.text);
-        log(transcript.text);
       } else {
         log(response.reasonPhrase.toString());
       }
     } on Exception catch (ex) {
       log(ex.toString());
     } finally {
-      isLoading.add(false);
+      isLoading.sink.add(false);
     }
   }
 }

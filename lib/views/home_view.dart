@@ -5,80 +5,51 @@ import 'package:flutter/material.dart';
 import 'package:sttdemo/controllers/home_controller.dart';
 import 'package:sttdemo/widgets/record_button.dart';
 
-class HomeView extends StatefulWidget {
-  HomeView({Key? key}) : super(key: key) {
-    controller = HomeController();
-  }
+class HomeView extends StatelessWidget {
+  HomeView({Key? key}) : super(key: key);
 
-  late final HomeController controller;
-
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  bool isRecording = false;
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    widget.controller.isLoading.stream.listen(onLoading);
-    super.initState();
-  }
-
-  void onLoading(value) {
-    setState(() => isLoading = value);
-  }
-
-  void onPressed() {
-    if (!isRecording) {
-      setState(() => isRecording = true);
-      widget.controller.startRecord();
-      return;
-    }
-
-    setState(() => isRecording = false);
-    widget.controller.stopRecord();
-  }
+  final HomeController controller = HomeController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: RecordButton(
-              isRecording: isRecording,
-              isLoading: isLoading,
-              onPressed: onPressed,
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RecordButton(
+              onRecord: () => controller.startRecord(),
+              onStop: () => controller.stopRecord(),
             ),
-          ),
-          Positioned(
-            bottom: 60,
-            left: 20,
-            right: 20,
-            child: SizedBox(
-              width: 250.0,
-              child: DefaultTextStyle(
-                style: TextStyle(fontSize: 20.0, color: Colors.grey[600]),
-                child: StreamBuilder<String>(
-                    stream: widget.controller.transcription.stream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return AnimatedTextKit(
-                          repeatForever: false,
-                          totalRepeatCount: 1,
-                          animatedTexts: [
-                            TyperAnimatedText(snapshot.data!),
-                          ],
-                        );
-                      }
-                      return Container();
-                    }),
+            StreamBuilder<bool>(
+              stream: controller.isLoading,
+              initialData: false,
+              builder: (context, snapshot) => Visibility(
+                visible: snapshot.data!,
+                replacement: const SizedBox(height: 2),
+                child: SizedBox(
+                  height: 2,
+                  width: 200,
+                  child: LinearProgressIndicator(
+                    color: Colors.blue[600],
+                  ),
+                ),
               ),
             ),
-          )
-        ],
+            StreamBuilder<String>(
+                stream: controller.transcription,
+                initialData: '',
+                builder: (context, snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      snapshot.data!,
+                      style: TextStyle(fontSize: 20, color: Colors.grey[600]),
+                    ),
+                  );
+                })
+          ],
+        ),
       ),
     );
   }

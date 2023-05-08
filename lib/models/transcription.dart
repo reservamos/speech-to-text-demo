@@ -12,4 +12,7 @@ class Transcription {
   Map<String, dynamic> toJson() => {
         "text": text,
       };
+
+  @override
+  String toString() => '{text: $text}';
 }
