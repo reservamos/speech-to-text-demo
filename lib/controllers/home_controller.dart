@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -12,11 +13,12 @@ class HomeController {
   }
 
   late final Record record;
+  StreamController<bool> isLoading = StreamController<bool>.broadcast();
 
   Future<void> startRecord() async {
     Directory tmpDir = await getTemporaryDirectory();
     String audioPath = '${tmpDir.path}/${Constants.audioFile}';
-    log(audioPath);
+
     if (await record.hasPermission()) {
       // Start recording
       await record.start(
@@ -30,9 +32,9 @@ class HomeController {
 
   Future<void> stopRecord() async {
     await record.stop();
-    // if (!await record.isRecording()) {
-    //   getOpenAITranscription();
-    // }
+    if (!await record.isRecording()) {
+      getOpenAITranscription();
+    }
   }
 
   Future<void> getOpenAITranscription() async {
@@ -43,8 +45,9 @@ class HomeController {
     MultipartRequest request = MultipartRequest(
       'POST',
       Uri(
-        host: const String.fromEnvironment('OPEN_AI_API'),
-        path: '/audio/transcriptions',
+        scheme: 'https',
+        host: Constants.openAIHost,
+        path: Constants.openAITranscriptionEndpoint,
       ),
     );
 
@@ -55,20 +58,29 @@ class HomeController {
     });
 
     Directory tmpDir = await getTemporaryDirectory();
+    String audioPath = '${tmpDir.path}/${Constants.audioFile}';
+
     request.files.add(await MultipartFile.fromPath(
       'file',
-      tmpDir.path,
+      audioPath,
       filename: Constants.audioFile,
     ));
 
     request.headers.addAll(headers);
 
-    StreamedResponse response = await request.send();
+    try {
+      isLoading.add(true);
+      StreamedResponse response = await request.send();
 
-    if (response.statusCode == 200) {
-      log(await response.stream.bytesToString());
-    } else {
-      log(response.reasonPhrase.toString());
+      if (response.statusCode == 200) {
+        log(await response.stream.bytesToString());
+      } else {
+        log(response.reasonPhrase.toString());
+      }
+    } on Exception catch (ex) {
+      log(ex.toString());
+    } finally {
+      isLoading.add(false);
     }
   }
 }
