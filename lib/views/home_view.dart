@@ -1,9 +1,6 @@
-import 'dart:developer';
-import 'dart:ui';
-
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:sttdemo/controllers/home_controller.dart';
+import 'package:sttdemo/widgets/animated_background.dart';
 import 'package:sttdemo/widgets/record_button.dart';
 
 class HomeView extends StatelessWidget {
@@ -15,12 +12,9 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(
-            child: DecoratedBox(
-                decoration: BoxDecoration(
-                    gradient: RadialGradient(
-                        radius: 0.6,
-                        colors: [Colors.blue[600]!, Colors.black])))),
+        const Positioned.fill(
+          child: AnimatedBackground(),
+        ),
         Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(

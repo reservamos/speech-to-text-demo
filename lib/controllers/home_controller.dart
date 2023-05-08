@@ -42,22 +42,35 @@ class HomeController {
   }
 
   bool validateTranscription(String text) {
-    List<String> listString = text.split('|');
-
-    String origin = listString[0].split(':')[1].trim();
-    String destination = listString[1].split(':')[1].trim();
-    String date = listString[2].split(':')[1].trim();
-
-    log('origin: $origin, destination: $destination, date: $date',
-        name: 'isValidSearch');
-
-    if (origin.isNotEmpty && destination.isNotEmpty) {
-      isValidTranscription.sink.add(true);
-      return true;
+    if (text.startsWith('Lo siento')) {
+      isValidTranscription.sink.add(false);
+      transcription.sink.add(
+          'Lo siento, tu solicitud no contiene información de origen, ni destino, ni fecha, por favor intenta nuevamente');
+      return false;
     }
 
-    isValidTranscription.sink.add(false);
-    return false;
+    try {
+      List<String> listString = text.split('|');
+
+      String origin = listString[0].split(':')[1].trim();
+      String destination = listString[1].split(':')[1].trim();
+      String date = listString[2].split(':')[1].trim();
+
+      log('origin: $origin, destination: $destination, date: $date',
+          name: 'isValidSearch');
+
+      if (origin.isNotEmpty && destination.isNotEmpty) {
+        isValidTranscription.sink.add(true);
+        return true;
+      }
+
+      isValidTranscription.sink.add(false);
+      return false;
+    } on Exception catch (ex) {
+      log(ex.toString());
+      isValidTranscription.sink.add(false);
+      return false;
+    }
   }
 
   Future<void> getOpenAITranscription() async {
