@@ -30,13 +30,18 @@ class _RecordButtonState extends State<RecordButton> {
           isRecording ? widget.onStop!() : widget.onRecord!();
           setState(() => isRecording = !isRecording);
         },
-        child: CircleAvatar(
-          radius: 30,
-          backgroundColor: isRecording ? Colors.red[600] : Colors.blue[600],
-          child: Icon(
-            isRecording ? Icons.stop : Icons.mic_sharp,
-            color: Colors.white,
-            size: 30,
+        child: Material(
+          elevation: 3,
+          color: Colors.transparent,
+          type: MaterialType.circle,
+          child: CircleAvatar(
+            radius: 30,
+            backgroundColor: isRecording ? Colors.red[600] : Colors.blue[600],
+            child: Icon(
+              isRecording ? Icons.stop : Icons.mic_sharp,
+              color: Colors.white,
+              size: 30,
+            ),
           ),
         ),
       ),
