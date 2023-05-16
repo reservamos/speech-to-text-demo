@@ -1,6 +1,6 @@
 # Speech to Text
 
-## ⭐️ Overview
+### ⭐️ Overview
 
 Speech to text technology, also known as voice recognition, is the ability of a computer to **recognize and transcribe spoken language into written text**. This technology has come a long way in recent years, with improvements in accuracy, speed, and ease of use.
 
@@ -10,7 +10,7 @@ Another popular use case for speech to text is in the field of transcription. Ra
 
 Overall, speech to text technology has the potential to make communication more accessible and efficient for a wide range of individuals and industries. As the technology continues to improve, we can expect to see even more innovative applications in the years to come.
 
-## 🤖 Whisper model
+### 🤖 Whisper model
 
 ---
 
@@ -18,7 +18,7 @@ The **whisper model** is a type of speech recognition model that uses neural net
 
 More information about of Whisper model: [https://openai.com/research/whisper](https://openai.com/research/whisper)
 
-## 🤔 what can Whisper do?
+### 🤔 what can Whisper do?
 
 ---
 
@@ -27,7 +27,7 @@ The speech to text API provides two endpoints, **`transcriptions`** and **`tr
 - Transcribe audio into whatever language the audio is in.
 - Translate and transcribe the audio into english (Very good for standardize prompts starting from different audio inputs, by example: audio from our customers from Latin America and Brazil).
 
-## ⛔️ Whisper limitations
+### ⛔️ Whisper limitations
 
 ---
 
@@ -35,7 +35,7 @@ The speech to text API provides two endpoints, **`transcriptions`** and **`tr
 - Supported audio file types : **`mp3`**, **`mp4`**, **`mpeg`**, **`mpga`**, **`m4a`**, **`wav`**, and **`webm`**.
 - Supported languages: [https://platform.openai.com/docs/guides/speech-to-text/supported-languages](https://platform.openai.com/docs/guides/speech-to-text/supported-languages)
 
-## 🙌🏻 Hands on
+### 🙌🏻 Hands on
 
 ---
 
@@ -52,7 +52,7 @@ The speech to text API provides two endpoints, **`transcriptions`** and **`tr
 
    > ℹ️ _We can use a terminal to test the request_
 
-   ### Transcriptions
+   ## Transcriptions
 
    - Transcription request
 
@@ -65,7 +65,7 @@ The speech to text API provides two endpoints, **`transcriptions`** and **`tr
        --form 'model="whisper-1"'
      ```
 
-     We can add more data to request, by example add a parameter for specify audio language and add a `**prompt**` to maintain the context of conversation or guide to the language model about of the audio context.
+     We can add more data to request, by example add a parameter for specify audio language and add a **`prompt`** to maintain the context of conversation or guide to the language model about of the audio context.
 
      > ℹ️ The **[prompt](https://platform.openai.com/docs/guides/speech-to-text/prompting)** should match the audio language
 
@@ -97,7 +97,7 @@ The speech to text API provides two endpoints, **`transcriptions`** and **`tr
      	--form 'model="whisper-1"'
      ```
 
-     Optionally we can add a `**prompt**` to maintain the context of conversation or guide to the language model about of the audio context.
+     Optionally we can add a **`prompt`** to maintain the context of conversation or guide to the language model about of the audio context.
 
      > ℹ️ The **[prompt](https://platform.openai.com/docs/guides/speech-to-text/prompting)** should be in English.
 
@@ -116,7 +116,7 @@ The speech to text API provides two endpoints, **`transcriptions`** and **`tr
      }
      ```
 
-## 🍯 Give me the honey, baby 🐝
+### 🍯 Give me the honey, baby 🐝
 
 ---
 
@@ -199,7 +199,7 @@ In last days i did created a flutter app demo to learn how to must be the flow e
 
 1. What we doing with the transcription? 🤷🏻‍♂️
 
-   We can chain the transcription with **[ChatGPT** **completions**](https://platform.openai.com/docs/api-reference/making-requests) to validate or get some util data from the audio recorded, the magic is in the chat prompt
+   We can chain the transcription with **[ChatGPT completions](https://platform.openai.com/docs/api-reference/making-requests)** to validate or get some util data from the audio recorded, the magic is in the chat prompt
 
    Context about the chat prompt:
 
@@ -297,7 +297,7 @@ In last days i did created a flutter app demo to learn how to must be the flow e
      }
    ```
 
-## 📚 Resources
+### 📚 Resources
 
 ---
 
